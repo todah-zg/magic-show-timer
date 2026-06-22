@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:magic_show_contestant/main.dart';
+import 'package:magic_show_timer/main.dart';
 
 void main() {
   testWidgets('app renders without crashing', (WidgetTester tester) async {

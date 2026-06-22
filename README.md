@@ -1,6 +1,6 @@
-# magic_show_contestant
+# magic-show-timer
 
-A new Flutter project.
+Codemagic conference booth contestant app.
 
 ## Getting Started
 

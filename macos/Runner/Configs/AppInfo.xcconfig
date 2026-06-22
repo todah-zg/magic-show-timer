@@ -8,7 +8,7 @@
 PRODUCT_NAME = Magic Show
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = io.codemagic.magicShowContestant
+PRODUCT_BUNDLE_IDENTIFIER = io.codemagic.magicShowTimer
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2026 io.codemagic. All rights reserved.
