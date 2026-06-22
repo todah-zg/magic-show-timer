@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../models/app_settings.dart';
+import '../services/google_sheets_service.dart';
 import '../services/sheets_service.dart';
 
 enum _Phase { form, timing, thankyou }
@@ -45,8 +46,7 @@ class _ContestantScreenState extends State<ContestantScreen> {
   int _countdown = 0;
   Timer? _countdownTimer;
 
-  // Swap this for GoogleSheetsService in the next step.
-  final SheetsService _sheets = StubSheetsService();
+  final SheetsService _sheets = GoogleSheetsService();
 
   @override
   void dispose() {
