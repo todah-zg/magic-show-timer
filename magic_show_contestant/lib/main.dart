@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'models/app_settings.dart';
 import 'screens/contestant_screen.dart';
 import 'screens/settings_screen.dart';
@@ -67,17 +68,48 @@ class _AppShellState extends State<_AppShell> {
   Widget build(BuildContext context) {
     final settings = _settings;
 
+    final Widget screen;
     if (settings == null) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      screen = const Scaffold(body: Center(child: CircularProgressIndicator()));
+    } else if (!settings.isConfigured) {
+      screen = SettingsScreen(onSaved: _onSettingsSaved);
+    } else {
+      screen = ContestantScreen(
+        settings: settings,
+        onOpenSettings: _openSettings,
+      );
     }
 
-    if (!settings.isConfigured) {
-      return SettingsScreen(onSaved: _onSettingsSaved);
-    }
-
-    return ContestantScreen(
-      settings: settings,
-      onOpenSettings: _openSettings,
+    return PlatformMenuBar(
+      menus: [
+        PlatformMenu(
+          label: 'Magic Show',
+          menus: [
+            PlatformMenuItemGroup(
+              members: [
+                PlatformMenuItem(
+                  label: 'Preferences…',
+                  shortcut: const SingleActivator(
+                    LogicalKeyboardKey.comma,
+                    meta: true,
+                  ),
+                  // Disabled when unconfigured — user is already on settings.
+                  onSelected:
+                      settings?.isConfigured == true ? _openSettings : null,
+                ),
+              ],
+            ),
+            PlatformMenuItemGroup(
+              members: [
+                const PlatformProvidedMenuItem(
+                  type: PlatformProvidedMenuItemType.quit,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+      child: screen,
     );
   }
 }
