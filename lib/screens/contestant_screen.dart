@@ -278,59 +278,68 @@ class _FormView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 560),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Enter your details to compete',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: const Color(0xFF0031EA),
-                      fontWeight: FontWeight.bold,
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 560),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'Enter your details to compete',
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                color: const Color(0xFF0031EA),
+                                fontWeight: FontWeight.bold,
+                              ),
+                      textAlign: TextAlign.center,
                     ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 32),
-              TextField(
-                controller: nameCtrl,
-                decoration: InputDecoration(
-                  labelText: 'Full Name *',
-                  errorText: nameError ? 'Required' : null,
-                  border: const OutlineInputBorder(),
+                    const SizedBox(height: 32),
+                    TextField(
+                      controller: nameCtrl,
+                      decoration: InputDecoration(
+                        labelText: 'Full Name *',
+                        errorText: nameError ? 'Required' : null,
+                        border: const OutlineInputBorder(),
+                      ),
+                      textInputAction: TextInputAction.next,
+                      onChanged: onNameChanged,
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: emailCtrl,
+                      decoration: InputDecoration(
+                        labelText: 'Email *',
+                        errorText: emailError ? 'Required' : null,
+                        border: const OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      onChanged: onEmailChanged,
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: nicknameCtrl,
+                      decoration: const InputDecoration(
+                        labelText: 'Nickname (optional)',
+                        border: OutlineInputBorder(),
+                      ),
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (_) => onStart(),
+                    ),
+                    const SizedBox(height: 40),
+                    _GradientButton(label: 'START', onPressed: onStart),
+                  ],
                 ),
-                textInputAction: TextInputAction.next,
-                onChanged: onNameChanged,
               ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: emailCtrl,
-                decoration: InputDecoration(
-                  labelText: 'Email *',
-                  errorText: emailError ? 'Required' : null,
-                  border: const OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-                onChanged: onEmailChanged,
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: nicknameCtrl,
-                decoration: const InputDecoration(
-                  labelText: 'Nickname (optional)',
-                  border: OutlineInputBorder(),
-                ),
-                textInputAction: TextInputAction.done,
-                onSubmitted: (_) => onStart(),
-              ),
-              const SizedBox(height: 40),
-              _GradientButton(label: 'START', onPressed: onStart),
-            ],
+            ),
           ),
         ),
       ),
@@ -357,54 +366,78 @@ class _TimerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Go, $name!',
-            style: const TextStyle(
-              fontSize: 28,
-              color: Color(0xFF0031EA),
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            timeDisplay,
-            style: const TextStyle(
-              fontSize: 120,
-              fontWeight: FontWeight.w200,
-              color: Color(0xFF00CEFF),
-              letterSpacing: -4,
-              height: 1,
-            ),
-          ),
-          const SizedBox(height: 48),
-          SizedBox(
-            width: 400,
-            child: submitting
-                ? const Center(child: CircularProgressIndicator())
-                : _GradientButton(label: 'STOP', onPressed: onStop),
-          ),
-          if (errorMessage != null) ...[
-            const SizedBox(height: 24),
-            Row(
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Center(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.warning_amber_rounded, color: Colors.red),
-                const SizedBox(width: 8),
-                Text(errorMessage!,
-                    style: const TextStyle(color: Colors.red, fontSize: 15)),
-                const SizedBox(width: 12),
-                TextButton(
-                  onPressed: onRetry,
-                  child: const Text('Retry'),
+                Text(
+                  'Go, $name!',
+                  style: const TextStyle(
+                    fontSize: 28,
+                    color: Color(0xFF0031EA),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      timeDisplay,
+                      style: const TextStyle(
+                        fontSize: 120,
+                        fontWeight: FontWeight.w200,
+                        color: Color(0xFF00CEFF),
+                        letterSpacing: -4,
+                        height: 1,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 48),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 400),
+                    child: submitting
+                        ? const Center(child: CircularProgressIndicator())
+                        : _GradientButton(label: 'STOP', onPressed: onStop),
+                  ),
+                ),
+                if (errorMessage != null) ...[
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.warning_amber_rounded,
+                            color: Colors.red),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            errorMessage!,
+                            style: const TextStyle(
+                                color: Colors.red, fontSize: 15),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        TextButton(
+                          onPressed: onRetry,
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             ),
-          ],
-        ],
+          ),
+        ),
       ),
     );
   }
@@ -423,44 +456,63 @@ class _ThankYouView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Amazing, $name!',
-            style: const TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF0031EA),
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Center(
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      'Amazing, $name!',
+                      style: const TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF0031EA),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Your time',
+                    style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+                  ),
+                  const SizedBox(height: 4),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      timeDisplay,
+                      style: const TextStyle(
+                        fontSize: 96,
+                        fontWeight: FontWeight.w200,
+                        color: Color(0xFF00CEFF),
+                        height: 1,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Your result has been recorded!',
+                    style: TextStyle(fontSize: 22, color: Colors.black54),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 48),
+                  Text(
+                    'Next contestant in $countdown seconds…',
+                    style: TextStyle(fontSize: 16, color: Colors.grey[400]),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 24),
-          Text(
-            'Your time',
-            style: TextStyle(fontSize: 18, color: Colors.grey[600]),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            timeDisplay,
-            style: const TextStyle(
-              fontSize: 96,
-              fontWeight: FontWeight.w200,
-              color: Color(0xFF00CEFF),
-              height: 1,
-            ),
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            'Your result has been recorded!',
-            style: TextStyle(fontSize: 22, color: Colors.black54),
-          ),
-          const SizedBox(height: 48),
-          Text(
-            'Next contestant in $countdown seconds…',
-            style: TextStyle(fontSize: 16, color: Colors.grey[400]),
-          ),
-        ],
+        ),
       ),
     );
   }
