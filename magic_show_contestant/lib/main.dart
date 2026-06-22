@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'models/app_settings.dart';
@@ -79,6 +80,11 @@ class _AppShellState extends State<_AppShell> {
         onOpenSettings: _openSettings,
       );
     }
+
+    // PlatformMenuBar is macOS-only. dart:io Platform.isMacOS reflects the
+    // host OS; defaultTargetPlatform reflects Flutter's target — the test
+    // runner sets it to android, so this guard also covers test runs.
+    if (defaultTargetPlatform != TargetPlatform.macOS) return screen;
 
     return PlatformMenuBar(
       menus: [

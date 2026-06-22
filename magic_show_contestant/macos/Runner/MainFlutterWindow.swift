@@ -12,14 +12,14 @@ class MainFlutterWindow: NSWindow {
 
     RegisterGeneratedPlugins(registry: flutterViewController)
 
-    // Fix 2: Enforce minimum window size and clear stale autosaved frame.
+    // Fix 2: Enforce minimum window size, clear stale autosaved frame, center.
     self.setFrameAutosaveName("")
     let minSize = NSSize(width: 1280, height: 720)
     self.minSize = minSize
     if self.frame.width < minSize.width || self.frame.height < minSize.height {
-      let origin = self.frame.origin
-      self.setFrame(NSRect(origin: origin, size: minSize), display: true)
+      self.setFrame(NSRect(origin: self.frame.origin, size: minSize), display: true)
     }
+    self.center()
 
     // Fix 3: NSOpenPanel steals first responder and never returns it.
     // Re-assert first responder every time the window becomes key.
