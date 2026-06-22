@@ -33,7 +33,13 @@ class GoogleSheetsService implements SheetsService {
     try {
       final api = SheetsApi(client);
       await api.spreadsheets.values.append(
-        ValueRange(values: [[name, email, nickname, timeSeconds]]),
+        ValueRange(values: [[
+          name,
+          email,
+          nickname,
+          timeSeconds,
+          DateTime.now().toUtc().toIso8601String(),
+        ]]),
         settings.sheetId,
         'A:E', // range determines which sheet tab; defaults to the first tab
         valueInputOption: 'RAW', // prevents '=formula' injection from user input
