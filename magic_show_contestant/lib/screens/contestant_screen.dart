@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../models/app_settings.dart';
 import '../services/google_sheets_service.dart';
@@ -232,29 +233,18 @@ class _GradientHeader extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 80,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFFEC0C43), Color(0xFFFF9100)],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-      ),
+      color: const Color(0xFF0A0A14),
       child: Stack(
         alignment: Alignment.center,
         children: [
-          const Text(
-            'CODEMAGIC MAGIC SHOW',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 3,
-            ),
+          SvgPicture.asset(
+            'assets/images/codemagic_logo.svg',
+            height: 42,
           ),
           Positioned(
             right: 8,
             child: IconButton(
-              icon: const Icon(Icons.settings, color: Colors.white54),
+              icon: const Icon(Icons.settings, color: Colors.white24),
               tooltip: 'Admin Settings',
               onPressed: onSettingsTap,
             ),
