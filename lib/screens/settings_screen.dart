@@ -15,6 +15,8 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   late final TextEditingController _credentialsCtrl;
   late final TextEditingController _sheetIdCtrl;
+  // Stores the JSON content; _credentialsCtrl shows only the display name.
+  String _credentialsJson = '';
   bool _credentialsError = false;
   bool _sheetIdError = false;
   bool _saving = false;
@@ -22,8 +24,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    _credentialsCtrl =
-        TextEditingController(text: widget.initial?.credentialsPath ?? '');
+    _credentialsJson = widget.initial?.credentialsJson ?? '';
+    _credentialsCtrl = TextEditingController(
+      text: _credentialsJson.isNotEmpty ? 'credentials.json (loaded)' : '',
+    );
     _sheetIdCtrl =
         TextEditingController(text: widget.initial?.sheetId ?? '');
   }
@@ -36,26 +40,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _pickCredentials() async {
-    // Must unfocus before opening NSOpenPanel — otherwise Flutter loses
-    // pointer event routing and the window becomes unresponsive.
+    // Must unfocus before opening NSOpenPanel — macOS-specific: avoids losing
+    // pointer event routing on the window after the panel closes.
     FocusScope.of(context).unfocus();
 
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['json'],
       dialogTitle: 'Select service account credentials JSON',
+      withData: true, // read bytes directly — iOS temp paths don't persist
     );
 
-    if (result != null && result.files.single.path != null) {
+    if (result != null && result.files.single.bytes != null) {
+      final json = String.fromCharCodes(result.files.single.bytes!);
       setState(() {
-        _credentialsCtrl.text = result.files.single.path!;
+        _credentialsJson = json;
+        _credentialsCtrl.text =
+            result.files.single.name.isNotEmpty
+                ? result.files.single.name
+                : 'credentials.json (loaded)';
         _credentialsError = false;
       });
     }
   }
 
   bool _validate() {
-    final credErr = _credentialsCtrl.text.trim().isEmpty;
+    final credErr = _credentialsJson.isEmpty;
     final sheetErr = _sheetIdCtrl.text.trim().isEmpty;
     setState(() {
       _credentialsError = credErr;
@@ -69,7 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() => _saving = true);
     try {
       final settings = AppSettings(
-        credentialsPath: _credentialsCtrl.text.trim(),
+        credentialsJson: _credentialsJson,
         sheetId: _sheetIdCtrl.text.trim(),
       );
       await settings.save();

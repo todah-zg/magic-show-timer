@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:googleapis/sheets/v4.dart';
 import 'package:googleapis_auth/auth_io.dart';
@@ -16,9 +15,8 @@ class GoogleSheetsService implements SheetsService {
     required String nickname,
     required int timeSeconds,
   }) async {
-    final credJson = jsonDecode(
-      await File(settings.credentialsPath).readAsString(),
-    ) as Map<String, dynamic>;
+    final credJson =
+        jsonDecode(settings.credentialsJson) as Map<String, dynamic>;
 
     final credentials = ServiceAccountCredentials.fromJson(credJson);
 
