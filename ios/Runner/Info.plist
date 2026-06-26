@@ -49,5 +49,11 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app does not access your photo library.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app does not use the camera.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app does not use your location.</string>
 </dict>
 </plist>
